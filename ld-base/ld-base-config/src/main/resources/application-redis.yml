@@ -2,4 +2,4 @@ spring:
   redis:
     host: ${ld.host}
     port: ${ld.redis-port}
-    password: root
+    password: ${REDIS_PASSWORD}

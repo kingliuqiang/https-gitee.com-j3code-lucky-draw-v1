@@ -12,3 +12,4 @@ DB_HOST: ${ld.host}:${ld.mysql-port}
 DB_NAME: bld
 DB_USERNAME: root
 DB_PASSWORD: ENC(dt7eo1i+3pVrhVI+cJicCa0AsP1mhq9wbwRJ7vOAt+TQtbLZr1Sq+oSLHmmLosz3)
+REDIS_PASSWORD: ENC(dt7eo1i+3pVrhVI+cJicCa0AsP1mhq9wbwRJ7vOAt+TQtbLZr1Sq+oSLHmmLosz3)
