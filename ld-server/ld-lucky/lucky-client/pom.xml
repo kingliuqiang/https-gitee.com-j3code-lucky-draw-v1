@@ -6,7 +6,6 @@
         <groupId>cn.j3code</groupId>
         <artifactId>ld-lucky</artifactId>
         <version>LD.2022.11.26</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <packaging>jar</packaging>
     <artifactId>lucky-client</artifactId>
