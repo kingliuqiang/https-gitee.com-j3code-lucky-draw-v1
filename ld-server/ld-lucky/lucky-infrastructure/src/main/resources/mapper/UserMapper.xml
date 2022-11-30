@@ -34,4 +34,19 @@
             </if>
         </where>
     </select>
+    <select id="listByParamQuery" resultType="cn.j3code.luckyinfrastructure.gateway.impl.dataobject.UserDB">
+        select *
+        from bld_user a
+        <where>
+            <if test="query.id != null">
+                and a.id = #{query.id}
+            </if>
+            <if test="query.name != null and query.name != ''">
+                and a.name like concat('%', #{query.name},'%')
+            </if>
+            <if test="query.phone != null and query.phone != ''">
+                and a.phone = #{query.phone}
+            </if>
+        </where>
+    </select>
 </mapper>

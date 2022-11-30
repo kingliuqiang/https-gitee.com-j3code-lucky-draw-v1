@@ -27,7 +27,7 @@ public interface IUserService {
      * @param query
      * @return
      */
-    UserVO login(UserLoginQuery query);
+    String login(UserLoginQuery query);
 
 
     /**

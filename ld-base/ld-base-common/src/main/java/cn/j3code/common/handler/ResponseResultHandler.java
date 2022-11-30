@@ -3,6 +3,7 @@ package cn.j3code.common.handler;
 import cn.j3code.common.annotation.ResponseResult;
 import cn.j3code.config.vo.SuccessInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -11,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.Objects;
@@ -23,21 +24,25 @@ import java.util.Objects;
  * @description
  */
 @Slf4j
-@Component
+@ControllerAdvice
+@AllArgsConstructor
 public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
-    public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
+    public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
 
-        //如果是FileSystemResource 则不拦截
-        if (returnType.getMethod().getAnnotatedReturnType().getType().getTypeName()
-                .equals(FileSystemResource.class.getTypeName())) {
-            return false;
+        final var method = methodParameter.getMethod();
+        final var clazz = Objects.requireNonNull(method, "method is null").getDeclaringClass();
+
+        // 只处理 ResponseResult 标注的类或方法
+        var annotation = clazz.getAnnotation(ResponseResult.class);
+        if (Objects.isNull(annotation)) {
+            annotation = method.getAnnotation(ResponseResult.class);
         }
 
-        // 判断是否增强，说白了就是看知否有 @ResponseResult 注解，有就要处理结果集
-        ResponseResult annotation = returnType.getClass().getAnnotation(ResponseResult.class);
-        if (Objects.isNull(annotation)){
-            annotation = returnType.getMethod().getAnnotation(ResponseResult.class);
+        //如果是FileSystemResource 则不拦截
+        if (method.getAnnotatedReturnType().getType().getTypeName()
+                .equals(FileSystemResource.class.getTypeName())) {
+            return false;
         }
         return annotation != null && !annotation.ignore();
     }

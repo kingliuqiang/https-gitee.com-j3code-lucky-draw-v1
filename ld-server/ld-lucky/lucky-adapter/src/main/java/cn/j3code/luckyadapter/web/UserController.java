@@ -4,12 +4,12 @@ import cn.j3code.common.annotation.ResponseResult;
 import cn.j3code.luckyclient.api.IUserService;
 import cn.j3code.luckyclient.dto.UserRegisterCmd;
 import cn.j3code.luckyclient.dto.data.UserVO;
+import cn.j3code.luckyclient.dto.query.UserLoginQuery;
+import cn.j3code.luckyclient.dto.query.UserUpdateCmd;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author J3（about：https://j3code.cn）
@@ -28,6 +28,22 @@ public class UserController {
     @PostMapping("/register")
     public UserVO register(@Validated @RequestBody UserRegisterCmd cmd) {
         return userService.register(cmd);
+    }
+
+
+    @PostMapping("/login")
+    public String login(@Validated @RequestBody UserLoginQuery query) {
+        return userService.login(query);
+    }
+
+    @GetMapping("/one")
+    public UserVO one(@RequestParam(value = "id") Long id) {
+        return userService.one(id);
+    }
+
+    @PostMapping("/update")
+    public UserVO update(@Validated @RequestBody UserUpdateCmd cmd) {
+        return userService.update(cmd);
     }
 
 }

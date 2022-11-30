@@ -32,6 +32,14 @@
             <groupId>cn.j3code</groupId>
             <artifactId>lucky-infrastructure</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>cn.j3code</groupId>
+            <artifactId>ld-base-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 
 

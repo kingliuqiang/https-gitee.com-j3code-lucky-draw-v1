@@ -1,7 +1,10 @@
 package cn.j3code.luckyinfrastructure.convertor;
+import cn.j3code.luckydomain.user.PassWord;
 import cn.j3code.luckydomain.user.UserEntity;
 import cn.j3code.luckydomain.user.UserName;
 import cn.j3code.luckyinfrastructure.gateway.impl.dataobject.UserDB;
+
+import java.util.Objects;
 
 /**
  * @author J3（about：https://j3code.cn）
@@ -15,7 +18,10 @@ public class UserConvertor {
         UserDB userDB = new UserDB();
         userDB.setId(entity.getId());
         userDB.setUsername(entity.getUsername().getUsername());
-        userDB.setPassword(entity.getPassword().getEncryptionPassWord().getPassword());
+
+        if (Objects.nonNull(entity.getPassword())){
+            userDB.setPassword(entity.getPassword().getEncryptionPassWord().getPassword());
+        }
         userDB.setName(entity.getName());
         userDB.setPhone(entity.getPhone());
         userDB.setCreateTime(entity.getCreateTime());
@@ -30,6 +36,9 @@ public class UserConvertor {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userDB.getId());
         userEntity.setUsername(new UserName(userDB.getUsername()));
+
+        userEntity.setPassword(new PassWord(new PassWord.EncryptionPassWord(userDB.getPassword())));
+
         userEntity.setName(userDB.getName());
         userEntity.setPhone(userDB.getPhone());
         userEntity.setCreateTime(userDB.getCreateTime());
