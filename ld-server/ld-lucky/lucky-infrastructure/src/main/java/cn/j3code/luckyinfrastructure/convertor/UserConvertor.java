@@ -25,6 +25,7 @@ public class UserConvertor {
         userDB.setName(entity.getName());
         userDB.setPhone(entity.getPhone());
         userDB.setCreateTime(entity.getCreateTime());
+        // 根据登入人的name值设置
         userDB.setCreator("三哥");
         userDB.setUpdateTime(entity.getCreateTime());
         userDB.setUpdater("三哥");

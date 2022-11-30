@@ -23,7 +23,7 @@ public class FailInfo extends ResultInfo{
     private final String exception;
 
 
-    protected FailInfo(String exception) {
+    public FailInfo(String exception) {
         super(false, DEFAULT_CODE, DEFAULT_MESSAGE);
         this.exception = exception;
     }
