@@ -7,6 +7,7 @@
     <!-- 设置日志输出路径  可以使“${}”来使用变量。TODO 后面是可以读配置的 -->
     <property name="log.path" value="logs"/>
     <property name="sys.name" value="bld"/>
+    <property name="sys.log.level" value="info"/>
 
     <!--0. 日志格式和颜色渲染 -->
     <!-- 彩色日志依赖的渲染类 -->
@@ -21,7 +22,7 @@
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <!--打印debug及以前级别的日志-->
-            <level>debug</level>
+            <level>${sys.log.level}</level>
         </filter>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
@@ -147,7 +148,7 @@
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
 <!--    <root level="debug">-->
-    <root level="info">
+    <root level="${sys.log.level}">
         <!-- TODO console打印后面可以只针对dev环境的 -->
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="INFO_FILE"/>

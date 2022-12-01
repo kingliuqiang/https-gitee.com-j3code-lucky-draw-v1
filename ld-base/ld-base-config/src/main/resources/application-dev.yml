@@ -3,6 +3,7 @@ ld:
   mysql-port: 3306
   nacos-port: ENC(BcdcabRwBBA7uZjeYhsUiQSBRR0jbaFGStYUBW6XfS7v2wPlGMu/A5pycGkXjoLv)
   redis-port: ENC(e3Mj+r0/c3lyB5fED16jYA06v8PRlB3reoHgWvmvbAVQUBUQA9q/sSvkTuTfbPc1)
+  druid_password: ENC(dt7eo1i+3pVrhVI+cJicCa0AsP1mhq9wbwRJ7vOAt+TQtbLZr1Sq+oSLHmmLosz3)
 #nacos
 nacos:
   #dev

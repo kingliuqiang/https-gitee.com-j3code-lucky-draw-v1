@@ -35,4 +35,5 @@ ld.global-filter:
   ignoreUrlSet:
     - /user/login
     - /user/register
+    - /ld-druid/
   authorization: Authorization

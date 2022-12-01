@@ -1,12 +1,13 @@
 #datasource
 spring.datasource:
   type: com.alibaba.druid.pool.DruidDataSource
-  driverClassName: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://${DB_HOST}/${DB_NAME}?useUnicode=true&useSSL=false&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
-  username: ${DB_USERNAME}
-  password: ${DB_PASSWORD}
   #   数据源其他配置
   druid:
+#    driverClassName: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST}/${DB_NAME}?useUnicode=true&useSSL=false&characterEncoding=utf8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     #     配置初始化大小、最小、最大线程数
     initialSize: 5
     minIdle: 5
@@ -26,7 +27,8 @@ spring.datasource:
     #     可以支持PSCache（提升写入、查询效率）
     poolPreparedStatements: true
     #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-    filters: stat,wall,log4j
+#    filters: stat,wall,log4j
+    filters: stat,wall
     #     保持长连接
     keepAlive: true
     maxPoolPreparedStatementPerConnectionSize: 20
