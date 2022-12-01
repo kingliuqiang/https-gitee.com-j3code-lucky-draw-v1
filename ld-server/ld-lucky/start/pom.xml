@@ -6,7 +6,6 @@
         <groupId>cn.j3code</groupId>
         <artifactId>ld-lucky</artifactId>
         <version>LD.2022.11.26</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <packaging>jar</packaging>
     <artifactId>start</artifactId>
@@ -33,6 +32,14 @@
             <groupId>cn.j3code</groupId>
             <artifactId>lucky-infrastructure</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>cn.j3code</groupId>
+            <artifactId>ld-base-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
     </dependencies>
 
 

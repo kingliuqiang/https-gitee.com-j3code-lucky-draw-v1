@@ -1,5 +1,6 @@
 package cn.j3code.common.handler;
 
+import cn.j3code.config.exception.TokenAuthException;
 import cn.j3code.config.exception.ldException;
 import cn.j3code.config.vo.FailInfo;
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
@@ -52,6 +53,14 @@ public class SysExceptionHandler {
 
     @ExceptionHandler(value = ldException.class)
     public FailInfo sysException(Exception ex) {
+        log.error("Exception_info:{}", ex.getMessage());
+        log.error("Exception_info:", ex);
+        var failInfo = FailInfo.builder().exception(ex.getMessage()).build();
+        return failInfo;
+    }
+
+    @ExceptionHandler(value = TokenAuthException.class)
+    public FailInfo tokenAuthException(Exception ex) {
         log.error("Exception_info:{}", ex.getMessage());
         log.error("Exception_info:", ex);
         var failInfo = FailInfo.builder().exception(ex.getMessage()).build();
