@@ -2,7 +2,7 @@ package cn.j3code.luckyapp.user.command;
 
 import cn.j3code.luckyapp.assembler.UserAssembler;
 import cn.j3code.luckyclient.dto.data.UserVO;
-import cn.j3code.luckyclient.dto.query.UserUpdateCmd;
+import cn.j3code.luckyclient.dto.UserUpdateCmd;
 import cn.j3code.luckydomain.gateway.UserGateway;
 import cn.j3code.luckydomain.user.UserEntity;
 import lombok.AllArgsConstructor;

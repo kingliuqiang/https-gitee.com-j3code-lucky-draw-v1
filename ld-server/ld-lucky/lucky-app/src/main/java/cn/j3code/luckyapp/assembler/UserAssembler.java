@@ -2,7 +2,7 @@ package cn.j3code.luckyapp.assembler;
 
 import cn.j3code.luckyclient.dto.UserRegisterCmd;
 import cn.j3code.luckyclient.dto.data.UserVO;
-import cn.j3code.luckyclient.dto.query.UserUpdateCmd;
+import cn.j3code.luckyclient.dto.UserUpdateCmd;
 import cn.j3code.luckydomain.user.PassWord;
 import cn.j3code.luckydomain.user.UserEntity;
 import cn.j3code.luckydomain.user.UserName;

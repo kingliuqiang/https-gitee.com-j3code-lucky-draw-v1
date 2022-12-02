@@ -1,4 +1,4 @@
-package cn.j3code.luckyclient.dto.query;
+package cn.j3code.luckyclient.dto;
 
 import com.alibaba.cola.dto.Command;
 import lombok.Data;

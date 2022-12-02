@@ -12,7 +12,7 @@ import cn.j3code.luckyclient.dto.UserRegisterCmd;
 import cn.j3code.luckyclient.dto.data.UserVO;
 import cn.j3code.luckyclient.dto.query.UserListByParamQuery;
 import cn.j3code.luckyclient.dto.query.UserLoginQuery;
-import cn.j3code.luckyclient.dto.query.UserUpdateCmd;
+import cn.j3code.luckyclient.dto.UserUpdateCmd;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

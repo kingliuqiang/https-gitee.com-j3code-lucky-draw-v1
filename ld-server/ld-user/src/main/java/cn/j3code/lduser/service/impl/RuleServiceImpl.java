@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
 * @author Administrator
 * @description 针对表【bld_rule】的数据库操作Service实现
-* @createDate 2022-11-26 23:01:42
+* @createDate 2022-12-01 23:20:02
 */
 @Service
 public class RuleServiceImpl extends ServiceImpl<RuleMapper, Rule>
