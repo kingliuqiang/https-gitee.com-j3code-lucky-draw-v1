@@ -52,8 +52,6 @@ public class PrizeAssembler {
         prizeEntity.setInventory(new Tnventory(cmd.getInventory()));
         prizeEntity.setMoney(new BigDecimal(cmd.getMoney().toString()));
         prizeEntity.setType(cmd.getType());
-        prizeEntity.setCreateTime(LocalDateTime.now());
-        prizeEntity.setCreator(SecurityUtil.getName());
         prizeEntity.setUpdateTime(LocalDateTime.now());
         prizeEntity.setUpdater(SecurityUtil.getName());
 
