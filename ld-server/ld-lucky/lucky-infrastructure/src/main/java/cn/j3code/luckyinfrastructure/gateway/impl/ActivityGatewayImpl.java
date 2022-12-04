@@ -1,6 +1,7 @@
 package cn.j3code.luckyinfrastructure.gateway.impl;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.enums.LdExceptionEnum;
+import cn.j3code.config.util.AssertUtil;
 import cn.j3code.luckyclient.dto.query.ActivityListByParamQuery;
 import cn.j3code.luckydomain.activity.ActivityEntity;
 import cn.j3code.luckydomain.gateway.ActivityGateway;
@@ -38,23 +39,13 @@ public class ActivityGatewayImpl implements ActivityGateway {
 
     private ActivityEntity updateActivity(ActivityEntity entity) {
         ActivityDB activityDB = ActivityConvertor.toActivityDB(entity);
-
-        int update = activityMapper.updateById(activityDB);
-        if (update <= 0) {
-            throw new ldException("修改数据失败！");
-        }
-
+        AssertUtil.isTrue(activityMapper.updateById(activityDB) <= 0, LdExceptionEnum.UPDATE_ERROR.getDescription());
         return ActivityConvertor.toEntity(activityDB);
     }
 
     private ActivityEntity addActivity(ActivityEntity entity) {
         ActivityDB activityDB = ActivityConvertor.toActivityDB(entity);
-
-        int insert = activityMapper.insert(activityDB);
-        if (insert <= 0) {
-            throw new ldException("保存数据失败！");
-        }
-
+        AssertUtil.isTrue(activityMapper.insert(activityDB) <= 0, LdExceptionEnum.ADD_ERROR.getDescription());
         return ActivityConvertor.toEntity(activityDB);
     }
 

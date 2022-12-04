@@ -1,6 +1,7 @@
 package cn.j3code.luckyinfrastructure.gateway.impl;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.enums.LdExceptionEnum;
+import cn.j3code.config.util.AssertUtil;
 import cn.j3code.luckyclient.dto.query.RuleListByParamQuery;
 import cn.j3code.luckydomain.gateway.RuleGateway;
 import cn.j3code.luckydomain.rule.RuleEntity;
@@ -41,10 +42,8 @@ public class RuleGatewayImpl implements RuleGateway {
     private RuleEntity addRule(RuleEntity entity) {
         RuleDB ruleDB = RuleConvertor.toRuleDB(entity);
 
-        int insert = ruleMapper.insert(ruleDB);
-        if (insert <= 0){
-            throw  new ldException("添加失败！");
-        }
+        AssertUtil.isTrue(ruleMapper.insert(ruleDB) <= 0,
+                LdExceptionEnum.ADD_ERROR.getDescription());
 
         return RuleConvertor.toEntity(ruleDB);
     }
@@ -52,10 +51,8 @@ public class RuleGatewayImpl implements RuleGateway {
     private RuleEntity updateRule(RuleEntity entity) {
         RuleDB ruleDB = RuleConvertor.toRuleDB(entity);
 
-        int update = ruleMapper.updateById(ruleDB);
-        if (update <= 0){
-            throw  new ldException("修改失败！");
-        }
+        AssertUtil.isTrue(ruleMapper.updateById(ruleDB) <= 0,
+                LdExceptionEnum.UPDATE_ERROR.getDescription());
 
         return RuleConvertor.toEntity(ruleDB);
     }

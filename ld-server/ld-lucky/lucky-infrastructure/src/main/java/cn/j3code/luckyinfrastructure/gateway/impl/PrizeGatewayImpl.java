@@ -1,6 +1,7 @@
 package cn.j3code.luckyinfrastructure.gateway.impl;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.enums.LdExceptionEnum;
+import cn.j3code.config.util.AssertUtil;
 import cn.j3code.luckyclient.dto.query.PrizeListByParamQuery;
 import cn.j3code.luckydomain.gateway.PrizeGateway;
 import cn.j3code.luckydomain.prize.PrizeEntity;
@@ -42,20 +43,18 @@ public class PrizeGatewayImpl implements PrizeGateway {
     private PrizeEntity updatePrize(PrizeEntity entity) {
         PrizeDB prizeDB = PrizeConvertor.toPrizeDB(entity);
 
-        int update = prizeMapper.updateById(prizeDB);
-        if (update <= 0){
-            throw new ldException("修改失败！");
-        }
+        AssertUtil.isTrue(prizeMapper.updateById(prizeDB) <= 0,
+                LdExceptionEnum.UPDATE_ERROR.getDescription());
+
         return PrizeConvertor.toEntity(prizeDB);
     }
 
     private PrizeEntity addPrize(PrizeEntity entity) {
         PrizeDB prizeDB = PrizeConvertor.toPrizeDB(entity);
 
-        int insert = prizeMapper.insert(prizeDB);
-        if (insert <= 0){
-            throw new ldException("添加失败！");
-        }
+        AssertUtil.isTrue(prizeMapper.insert(prizeDB) <= 0,
+                LdExceptionEnum.ADD_ERROR.getDescription());
+
         return PrizeConvertor.toEntity(prizeDB);
     }
 

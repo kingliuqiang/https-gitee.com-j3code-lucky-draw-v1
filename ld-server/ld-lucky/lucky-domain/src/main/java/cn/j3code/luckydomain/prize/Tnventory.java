@@ -1,6 +1,6 @@
 package cn.j3code.luckydomain.prize;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.exception.LdException;
 import lombok.Getter;
 
 /**
@@ -16,7 +16,7 @@ public class Tnventory {
 
     public Tnventory(Integer inventory) {
         if (inventory < 0) {
-            throw new ldException("库存数量请大于等于 0");
+            throw new LdException("库存数量请大于等于 0");
         }
         this.inventory = inventory;
     }

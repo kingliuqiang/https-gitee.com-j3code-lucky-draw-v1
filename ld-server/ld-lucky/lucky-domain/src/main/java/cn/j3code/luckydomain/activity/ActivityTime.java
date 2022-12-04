@@ -1,6 +1,7 @@
 package cn.j3code.luckydomain.activity;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.exception.LdCodeException;
+import cn.j3code.config.exception.LdException;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -28,11 +29,12 @@ public class ActivityTime {
     public ActivityTime(LocalDateTime startTime, LocalDateTime endTime) {
 
         if (Objects.isNull(startTime) || Objects.isNull(endTime)) {
-            throw new ldException("活动时间不为空");
+            throw new LdException("活动时间不为空");
         }
 
         if (startTime.isAfter(endTime)) {
-            throw new ldException("活动时间非法！");
+            //throw new ldException("活动时间非法！");
+            throw new LdCodeException(5050, "活动时间非法！");
         }
 
         this.startTime = startTime;

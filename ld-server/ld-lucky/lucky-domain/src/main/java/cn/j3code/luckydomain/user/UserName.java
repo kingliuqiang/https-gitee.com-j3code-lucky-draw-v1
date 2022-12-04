@@ -1,6 +1,6 @@
 package cn.j3code.luckydomain.user;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.exception.LdException;
 import lombok.Getter;
 
 import java.util.Objects;
@@ -20,7 +20,7 @@ public class UserName {
 
     public UserName(String username) {
         if (Objects.isNull(username)){
-            throw new ldException("账号不能为空");
+            throw new LdException("账号不能为空");
         }
         this.username = username;
     }

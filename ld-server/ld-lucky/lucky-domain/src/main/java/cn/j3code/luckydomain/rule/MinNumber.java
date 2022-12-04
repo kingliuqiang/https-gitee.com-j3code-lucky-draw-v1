@@ -1,6 +1,6 @@
 package cn.j3code.luckydomain.rule;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.exception.LdException;
 import lombok.Getter;
 
 /**
@@ -16,7 +16,7 @@ public class MinNumber {
 
     public MinNumber(Integer number){
         if (number < 1){
-            throw new ldException("规则次数必须大于等于 1");
+            throw new LdException("规则次数必须大于等于 1");
         }
 
         this.number = number;

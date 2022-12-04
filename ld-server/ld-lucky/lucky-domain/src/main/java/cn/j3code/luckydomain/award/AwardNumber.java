@@ -1,6 +1,6 @@
 package cn.j3code.luckydomain.award;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.exception.LdException;
 import lombok.Getter;
 
 /**
@@ -17,7 +17,7 @@ public class AwardNumber {
     public AwardNumber(Integer number) {
 
         if (number < 0) {
-            throw new ldException("奖项数量不合法，需大于等于 0");
+            throw new LdException("奖项数量不合法，需大于等于 0");
         }
 
         this.number = number;

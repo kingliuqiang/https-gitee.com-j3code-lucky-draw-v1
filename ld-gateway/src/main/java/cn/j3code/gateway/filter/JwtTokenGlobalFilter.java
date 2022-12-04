@@ -1,6 +1,6 @@
 package cn.j3code.gateway.filter;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.exception.LdException;
 import cn.j3code.config.util.JwtUtil;
 import cn.j3code.config.vo.FailInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -120,7 +120,7 @@ public class JwtTokenGlobalFilter implements GlobalFilter {
      */
     private Boolean ignore(String url, String ignoreUrl) {
         if (Objects.isNull(url)) {
-            throw new ldException("请求 url 有误！");
+            throw new LdException("请求 url 有误！");
         }
         return url.contains(ignoreUrl);
     }

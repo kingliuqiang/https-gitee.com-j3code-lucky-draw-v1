@@ -36,4 +36,5 @@ ld.global-filter:
     - /user/login
     - /user/register
     - /ld-druid/
+    - /test
   authorization: Authorization

@@ -3,6 +3,8 @@ package cn.j3code.luckyclient.dto.query;
 import com.alibaba.cola.dto.PageQuery;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author J3（about：https://j3code.cn）
  * @package cn.j3code.luckyclient.dto.query
@@ -13,6 +15,8 @@ import lombok.Data;
 public class RuleListByParamQuery extends PageQuery {
 
     private Long id;
+
+    private List<Long> ids;
 
     private String ruleName;
 

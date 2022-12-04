@@ -1,14 +1,18 @@
 package cn.j3code.luckyapp.activity.query;
 
 import cn.j3code.luckyapp.assembler.ActivityAssembler;
+import cn.j3code.luckyclient.dto.data.ActivityRuleVO;
 import cn.j3code.luckyclient.dto.data.ActivityVO;
 import cn.j3code.luckyclient.dto.query.ActivityListByParamQuery;
+import cn.j3code.luckyclient.dto.query.ActivityRuleListByParamQuery;
 import cn.j3code.luckydomain.activity.ActivityEntity;
 import cn.j3code.luckydomain.gateway.ActivityGateway;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author J3（about：https://j3code.cn）

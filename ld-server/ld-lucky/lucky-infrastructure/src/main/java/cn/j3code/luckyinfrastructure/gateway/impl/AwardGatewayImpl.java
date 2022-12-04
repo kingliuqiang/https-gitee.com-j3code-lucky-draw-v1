@@ -1,6 +1,7 @@
 package cn.j3code.luckyinfrastructure.gateway.impl;
 
-import cn.j3code.config.exception.ldException;
+import cn.j3code.config.enums.LdExceptionEnum;
+import cn.j3code.config.util.AssertUtil;
 import cn.j3code.luckyclient.dto.query.AwardListByParamQuery;
 import cn.j3code.luckydomain.award.AwardEntity;
 import cn.j3code.luckydomain.gateway.AwardGateway;
@@ -39,10 +40,8 @@ public class AwardGatewayImpl implements AwardGateway {
     private AwardEntity addAward(AwardEntity entity) {
         AwardDB awardDB = AwardConvertor.toAwardDB(entity);
 
-        int insert = awardMapper.insert(awardDB);
-        if (insert <= 0) {
-            throw new ldException("保存数据失败！");
-        }
+        AssertUtil.isTrue(awardMapper.insert(awardDB) <= 0,
+                LdExceptionEnum.ADD_ERROR.getDescription());
 
         return AwardConvertor.toEntity(awardDB);
     }
@@ -50,10 +49,8 @@ public class AwardGatewayImpl implements AwardGateway {
     private AwardEntity updateAward(AwardEntity entity) {
         AwardDB awardDB = AwardConvertor.toAwardDB(entity);
 
-        int update = awardMapper.updateById(awardDB);
-        if (update <= 0) {
-            throw new ldException("修改数据失败！");
-        }
+        AssertUtil.isTrue(awardMapper.updateById(awardDB) <= 0,
+                LdExceptionEnum.UPDATE_ERROR.getDescription());
 
         return AwardConvertor.toEntity(awardDB);
     }
