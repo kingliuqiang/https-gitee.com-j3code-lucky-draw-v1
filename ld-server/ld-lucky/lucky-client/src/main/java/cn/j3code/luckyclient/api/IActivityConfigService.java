@@ -2,6 +2,7 @@ package cn.j3code.luckyclient.api;
 
 import cn.j3code.luckyclient.dto.ActivityConfigAddCmd;
 import cn.j3code.luckyclient.dto.ActivityConfigUpdateCmd;
+import cn.j3code.luckyclient.dto.data.ActivityConfigCopyVO;
 import cn.j3code.luckyclient.dto.data.ActivityConfigVO;
 
 /**
@@ -18,4 +19,5 @@ public interface IActivityConfigService {
 
     ActivityConfigVO one(Long id);
 
+    ActivityConfigCopyVO copy(Long id);
 }

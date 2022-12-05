@@ -8,6 +8,8 @@ import cn.j3code.luckyapp.activity.query.ActivityListByParamQueryExe;
 import cn.j3code.luckyapp.activityrule.command.ActivityRuleAddCmdExe;
 import cn.j3code.luckyapp.activityrule.command.ActivityRuleDeleteExe;
 import cn.j3code.luckyapp.activityrule.query.ActivityRuleListByParamQueryExe;
+import cn.j3code.luckyapp.assembler.ActivityAssembler;
+import cn.j3code.luckyapp.assembler.AwardAssembler;
 import cn.j3code.luckyapp.award.command.AwardAddCmdExe;
 import cn.j3code.luckyapp.award.command.AwardUpdateCmdExe;
 import cn.j3code.luckyapp.award.query.AwardListByParamQueryExe;
@@ -19,6 +21,7 @@ import cn.j3code.luckyclient.dto.query.ActivityListByParamQuery;
 import cn.j3code.luckyclient.dto.query.ActivityRuleListByParamQuery;
 import cn.j3code.luckyclient.dto.query.AwardListByParamQuery;
 import cn.j3code.luckyclient.dto.query.RuleListByParamQuery;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -136,6 +139,21 @@ public class ActivityConfigServiceImpl implements IActivityConfigService {
         activityConfigVO.setRuleVOList(ruleVOList);
         activityConfigVO.setAwardVOList(awardVOList);
         return activityConfigVO;
+    }
+
+    @Override
+    public ActivityConfigCopyVO copy(Long id) {
+        ActivityConfigCopyVO activityConfigCopyVO = new ActivityConfigCopyVO();
+
+        ActivityConfigVO activityConfigVO = one(id);
+
+        activityConfigCopyVO.setActivityAddCmd(ActivityAssembler.toActivityAddCmd( activityConfigVO.getActivityVO()));
+        activityConfigCopyVO.setRuleIdList(activityConfigVO.getRuleVOList().stream().map(RuleVO::getId).collect(Collectors.toList()));
+        activityConfigCopyVO.setAwardAddCmdList(
+                new Page<AwardVO>().setRecords(activityConfigVO.getAwardVOList()).convert(AwardAssembler::toAwardAddCmd).getRecords()
+        );
+
+        return activityConfigCopyVO;
     }
 
 

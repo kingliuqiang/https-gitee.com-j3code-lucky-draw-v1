@@ -10,4 +10,6 @@ import org.apache.ibatis.annotations.Param;
 public interface PrizeMapper extends BaseMapper<PrizeDB> {
 
     IPage<PrizeDB> page(@Param("page") Page<PrizeDB> prizeDBPage, @Param("query") PrizeListByParamQuery query);
+
+    int deductionInventory(@Param("prizeId") Long prizeId, @Param("number") Integer number);
 }

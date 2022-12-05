@@ -55,4 +55,14 @@ public class ActivityAssembler {
 
         return activityEntity;
     }
+
+    public static ActivityAddCmd toActivityAddCmd(ActivityVO activityVO) {
+        ActivityAddCmd activityAddCmd = new ActivityAddCmd();
+        activityAddCmd.setActivityName(activityVO.getActivityName());
+        activityAddCmd.setStartTime(activityVO.getStartTime());
+        activityAddCmd.setEndTime(activityVO.getEndTime());
+        activityAddCmd.setDescribe(activityVO.getDescribe());
+
+        return activityAddCmd;
+    }
 }

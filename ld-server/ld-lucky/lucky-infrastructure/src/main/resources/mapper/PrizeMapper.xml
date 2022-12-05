@@ -35,4 +35,10 @@
             </if>
         </where>
     </select>
+
+    <update id="deductionInventory">
+        update bld_prize set inventory = inventory - #{number}
+        where id = #{prizeId}
+        and (inventory - #{number}) >= 0
+    </update>
 </mapper>

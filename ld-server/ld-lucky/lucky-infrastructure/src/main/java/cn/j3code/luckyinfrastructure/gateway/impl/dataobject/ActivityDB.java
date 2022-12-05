@@ -37,6 +37,7 @@ public class ActivityDB implements Serializable {
     /**
      * 描述
      */
+    @TableField("`describe`")
     private String describe;
 
     /**

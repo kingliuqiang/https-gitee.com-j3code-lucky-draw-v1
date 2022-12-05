@@ -63,4 +63,9 @@ public class PrizeGatewayImpl implements PrizeGateway {
         IPage<PrizeDB> page = prizeMapper.page(new Page<PrizeDB>(query.getPageIndex(), query.getPageSize()), query);
         return page.convert(PrizeConvertor::toEntity);
     }
+
+    @Override
+    public int deductionInventory(Long prizeId, Integer number) {
+        return prizeMapper.deductionInventory(prizeId, number);
+    }
 }

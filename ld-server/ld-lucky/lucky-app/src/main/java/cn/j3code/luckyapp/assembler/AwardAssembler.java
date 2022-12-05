@@ -60,4 +60,14 @@ public class AwardAssembler {
 
         return awardEntity;
     }
+
+    public static AwardAddCmd toAwardAddCmd(AwardVO awardVO) {
+        AwardAddCmd awardAddCmd = new AwardAddCmd();
+        awardAddCmd.setPrizeId(awardVO.getPrizeId());
+        awardAddCmd.setNumber(awardVO.getNumber());
+        awardAddCmd.setAwardName(awardVO.getAwardName());
+        awardAddCmd.setProbability(awardVO.getProbability());
+
+        return awardAddCmd;
+    }
 }

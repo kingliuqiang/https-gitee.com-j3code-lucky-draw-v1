@@ -13,7 +13,7 @@ public class AwardConvertor {
     public static AwardDB toAwardDB(AwardEntity entity) {
         AwardDB awardDB = new AwardDB();
         awardDB.setId(entity.getId());
-        awardDB.setPrizeId(entity.getActivityId());
+        awardDB.setPrizeId(entity.getPrizeId());
         awardDB.setActivityId(entity.getActivityId());
         awardDB.setNumber(entity.getNumber().getNumber());
         awardDB.setAwardName(entity.getAwardName());
