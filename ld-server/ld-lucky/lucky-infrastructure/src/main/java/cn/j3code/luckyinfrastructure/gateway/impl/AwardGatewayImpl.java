@@ -61,4 +61,10 @@ public class AwardGatewayImpl implements AwardGateway {
 
         return page.convert(AwardConvertor::toEntity);
     }
+
+    @Override
+    public int deductionAwardNumber(Long awardId, Integer number) {
+
+        return awardMapper.deductionAwardNumber(awardId, number);
+    }
 }

@@ -1,13 +1,17 @@
 package cn.j3code.luckyapp.service;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.j3code.config.util.SecurityUtil;
 import cn.j3code.luckyapp.activity.command.ActivityAddCmdExe;
 import cn.j3code.luckyapp.activity.command.ActivityUpdateCmdExe;
+import cn.j3code.luckyapp.activity.command.DefaultDrawExe;
 import cn.j3code.luckyapp.activity.query.ActivityListByParamQueryExe;
+import cn.j3code.luckyclient.api.IActivityConfigService;
 import cn.j3code.luckyclient.api.IActivityService;
 import cn.j3code.luckyclient.dto.ActivityAddCmd;
 import cn.j3code.luckyclient.dto.ActivityUpdateCmd;
 import cn.j3code.luckyclient.dto.data.ActivityVO;
+import cn.j3code.luckyclient.dto.data.DrawResultVO;
 import cn.j3code.luckyclient.dto.query.ActivityListByParamQuery;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.AllArgsConstructor;
@@ -28,6 +32,10 @@ public class ActivityServiceImpl implements IActivityService {
     private final ActivityAddCmdExe activityAddCmdExe;
     private final ActivityUpdateCmdExe activityUpdateCmdExe;
     private final ActivityListByParamQueryExe activityListByParamQueryExe;
+    private final DefaultDrawExe drawExe;
+
+    private final IActivityConfigService activityConfigService;
+
 
     @Override
     public ActivityVO add(ActivityAddCmd cmd) {
@@ -55,5 +63,11 @@ public class ActivityServiceImpl implements IActivityService {
         }
 
         return page.getRecords().get(0);
+    }
+
+    @Override
+    public DrawResultVO draw(Long activityId) {
+        log.info("用户：{}，开始抽奖...", SecurityUtil.getName());
+        return drawExe.execute(activityConfigService.one(activityId));
     }
 }

@@ -70,4 +70,8 @@ public class AwardAssembler {
 
         return awardAddCmd;
     }
+
+    public static AwardEntity toAwardEntity(AwardVO awardVO) {
+        return null;
+    }
 }
