@@ -1,9 +1,10 @@
 package cn.j3code.luckyapp.activity.command;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.WeightRandom;
 import cn.hutool.core.util.RandomUtil;
 import cn.j3code.config.exception.LdException;
+import cn.j3code.config.util.AssertUtil;
+import cn.j3code.luckyapp.context.ActivityDrawContext;
 import cn.j3code.luckyclient.dto.data.*;
 import cn.j3code.luckydomain.activity.ActivityEntity;
 import cn.j3code.luckydomain.activity.ActivityStatusEnum;
@@ -12,12 +13,13 @@ import cn.j3code.luckydomain.award.AwardEntity;
 import cn.j3code.luckydomain.gateway.AwardGateway;
 import cn.j3code.luckydomain.gateway.PrizeGateway;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author J3（about：https://j3code.cn）
@@ -25,25 +27,44 @@ import java.util.stream.Collectors;
  * @createTime 2022/12/7 - 0:03
  * @description
  */
+@Getter
 @Slf4j
 @Component
 @AllArgsConstructor
-public class DefaultDrawExe extends BaseDrawExe{
+public class DefaultDrawExe extends BaseDrawExe {
 
     private final AwardGateway awardGateway;
     private final PrizeGateway prizeGateway;
+    private final TransactionTemplate transactionTemplate;
+
 
     @Override
-    protected void addAcceptPrize(Long id, AwardEntity awardEntity) {
+    protected void addRecord(ActivityDrawContext context) {
 
     }
 
-
     @Override
-    protected int deductionAwardNumber(Long awardId, Integer number) {
+    protected Boolean drawBefore(ActivityDrawContext context) {
 
-        // 这里需要优化
-        return awardGateway.deductionAwardNumber(awardId, number);
+        return transactionTemplate.execute(status -> {
+            Boolean seccess = Boolean.TRUE;
+            try {
+                // 这里需要优化
+                // 扣减库存
+                int update = awardGateway.deductionAwardNumber(context.getAwardVO().getId(), 1);
+                AssertUtil.isTrue(update != 1, "扣减库存失败！");
+                // 插入记录
+                addRecord(context);
+            } catch (Exception e) {
+                //错误处理
+                status.setRollbackOnly();
+                // 回退库存
+                awardGateway.deductionAwardNumber(context.getAwardVO().getId(), -1);
+                log.error("扣减库存和插入记录出错", e);
+                seccess = Boolean.FALSE;
+            }
+            return seccess;
+        });
     }
 
     @Override
@@ -66,15 +87,6 @@ public class DefaultDrawExe extends BaseDrawExe{
         //创建带有权重的随机生成器
         WeightRandom<AwardVO> wr = RandomUtil.weightRandom(weightList);
         return wr.next();
-    }
-    @Override
-    protected List<AwardVO> removeAwardInventoryNull(List<AwardVO> awardVOList) {
-        if (CollectionUtil.isEmpty(awardVOList)) {
-            return new ArrayList<>();
-        }
-        return awardVOList.stream()
-                .filter(item -> item.getNumber() > 0 || "0".equals(item.getPrizeId().toString()))
-                .collect(Collectors.toList());
     }
 
     @Override

@@ -6,6 +6,7 @@ import cn.j3code.luckyapp.activity.command.ActivityAddCmdExe;
 import cn.j3code.luckyapp.activity.command.ActivityUpdateCmdExe;
 import cn.j3code.luckyapp.activity.command.RedisDeductionAwardNumberDrawExe;
 import cn.j3code.luckyapp.activity.query.ActivityListByParamQueryExe;
+import cn.j3code.luckyapp.context.ActivityDrawContext;
 import cn.j3code.luckyclient.api.IActivityConfigService;
 import cn.j3code.luckyclient.api.IActivityService;
 import cn.j3code.luckyclient.dto.ActivityAddCmd;
@@ -69,6 +70,8 @@ public class ActivityServiceImpl implements IActivityService {
     @Override
     public DrawResultVO draw(Long activityId) {
         log.info("用户：{}，开始抽奖...", SecurityUtil.getName());
-        return drawExe.execute(activityConfigService.one(activityId));
+        ActivityDrawContext context = new ActivityDrawContext()
+                .setActivityConfigVO(activityConfigService.one(activityId));
+        return drawExe.execute(context);
     }
 }

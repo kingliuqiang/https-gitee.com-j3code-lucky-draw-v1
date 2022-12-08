@@ -4,7 +4,11 @@ import cn.j3code.common.annotation.ResponseResult;
 import cn.j3code.config.enums.LdExceptionEnum;
 import cn.j3code.config.exception.LdCodeException;
 import cn.j3code.config.util.AssertUtil;
+import cn.j3code.luckyapp.activity.command.RedisDeductionAwardNumberDrawExe;
+import cn.j3code.luckyapp.context.ActivityDrawContext;
+import cn.j3code.luckyapp.listener.AwardInventoryToRedisApplicationListener;
 import cn.j3code.luckyapp.listener.event.ActivityCreateEvent;
+import cn.j3code.luckyapp.mq.product.ActivityDrawMessageProduct;
 import cn.j3code.luckyclient.dto.data.ActivityConfigVO;
 import cn.j3code.luckyclient.dto.data.ActivityVO;
 import cn.j3code.luckyclient.dto.data.AwardVO;
@@ -31,18 +35,22 @@ public class TestController {
 
     private final ApplicationEventMulticaster applicationEventMulticaster;
 
+    private final RedisDeductionAwardNumberDrawExe drawExe;
+
+    private final ActivityDrawMessageProduct activityDrawMessageProducer;
+
     @GetMapping("/errorTest01")
-    public void errorTest01(){
+    public void errorTest01() {
         throw new LdCodeException(5050, "测试错误！");
     }
 
     @GetMapping("/errorTest02")
-    public void errorTest02(){
+    public void errorTest02() {
         AssertUtil.isTrue(Boolean.TRUE, LdExceptionEnum.ADD_ERROR.getDescription());
     }
 
     @GetMapping("/activityCreateEventTest")
-    public void activityCreateEventTest(){
+    public void activityCreateEventTest() {
 
         ActivityConfigVO activityConfigVO = new ActivityConfigVO();
 
@@ -71,4 +79,21 @@ public class TestController {
         applicationEventMulticaster.multicastEvent(new ActivityCreateEvent("", activityConfigVO));
     }
 
+
+    @GetMapping("/invokeStockDeductionLuaTest")
+    public Integer invokeStockDeductionLuaTest() {
+        return drawExe.invokeStockDeductionLua(
+                AwardInventoryToRedisApplicationListener.getKey(1L, 100L));
+    }
+
+    @GetMapping("/invokeStockRollbackLuaTest")
+    public Integer invokeStockRollbackLuaTest() {
+        return drawExe.invokeStockRollbackLua(
+                AwardInventoryToRedisApplicationListener.getKey(1L, 100L));
+    }
+
+    @GetMapping("/activityDrawMessageProducerTest")
+    public Boolean activityDrawMessageProducerTest() {
+        return activityDrawMessageProducer.send(new ActivityDrawContext());
+    }
 }
