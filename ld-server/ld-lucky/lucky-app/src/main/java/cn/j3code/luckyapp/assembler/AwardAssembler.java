@@ -72,6 +72,18 @@ public class AwardAssembler {
     }
 
     public static AwardEntity toAwardEntity(AwardVO awardVO) {
-        return null;
+        AwardEntity awardEntity = new AwardEntity();
+        awardEntity.setId(awardVO.getId());
+        awardEntity.setPrizeId(awardVO.getPrizeId());
+        awardEntity.setActivityId(awardVO.getActivityId());
+        awardEntity.setNumber(new AwardNumber(awardVO.getNumber()));
+        awardEntity.setAwardName(awardVO.getAwardName());
+        awardEntity.setProbability(awardVO.getProbability());
+        awardEntity.setCreateTime(awardVO.getCreateTime());
+        awardEntity.setCreator(awardVO.getCreator());
+        awardEntity.setUpdateTime(awardVO.getUpdateTime());
+        awardEntity.setUpdater(awardVO.getUpdater());
+
+        return awardEntity;
     }
 }

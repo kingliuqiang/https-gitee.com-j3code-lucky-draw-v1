@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.j3code.config.util.SecurityUtil;
 import cn.j3code.luckyapp.activity.command.ActivityAddCmdExe;
 import cn.j3code.luckyapp.activity.command.ActivityUpdateCmdExe;
-import cn.j3code.luckyapp.activity.command.DefaultDrawExe;
+import cn.j3code.luckyapp.activity.command.RedisDeductionAwardNumberDrawExe;
 import cn.j3code.luckyapp.activity.query.ActivityListByParamQueryExe;
 import cn.j3code.luckyclient.api.IActivityConfigService;
 import cn.j3code.luckyclient.api.IActivityService;
@@ -32,7 +32,8 @@ public class ActivityServiceImpl implements IActivityService {
     private final ActivityAddCmdExe activityAddCmdExe;
     private final ActivityUpdateCmdExe activityUpdateCmdExe;
     private final ActivityListByParamQueryExe activityListByParamQueryExe;
-    private final DefaultDrawExe drawExe;
+
+    private final RedisDeductionAwardNumberDrawExe drawExe;
 
     private final IActivityConfigService activityConfigService;
 

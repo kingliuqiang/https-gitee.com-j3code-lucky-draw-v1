@@ -28,13 +28,14 @@ public abstract class BaseDrawExe {
         AwardVO awardVO = getAward(awardVOList);
 
         AwardEntity awardEntity = AwardAssembler.toAwardEntity(awardVO);
-        if (!awardEntity.isPrize()) {
+        if (Boolean.FALSE.equals(awardEntity.isPrize())) {
             return getDrawResultVO(awardEntity);
         }
         // 扣减奖项库存
-        if (deductionAwardNumber(awardEntity.getId(), 1) != 1) {
+        if (defaultDeductionAwardNumber(activityConfigVO.getActivityVO().getId(), awardEntity.getId()) != 1) {
             return getDefaultDrawResultVO(awardVOList);
         }
+
         // 插入获奖记录
         addAcceptPrize(activityConfigVO.getActivityVO().getId(), awardEntity);
         // 返回结果
@@ -43,7 +44,20 @@ public abstract class BaseDrawExe {
 
     protected abstract void addAcceptPrize(Long id, AwardEntity awardEntity);
 
-    protected abstract DrawResultVO getDefaultDrawResultVO(List<AwardVO> awardVOList);
+    public Integer defaultDeductionAwardNumber(Long activityId, Long awardId) {
+        return deductionAwardNumber(awardId, 1);
+    }
+
+    private DrawResultVO getDefaultDrawResultVO(List<AwardVO> awardVOList) {
+        DrawResultVO result = new DrawResultVO();
+        for (AwardVO awardVO : awardVOList) {
+            if ("0".equals(awardVO.getPrizeId().toString())) {
+                result = getDrawResultVO(AwardAssembler.toAwardEntity(awardVO));
+                break;
+            }
+        }
+        return result;
+    }
 
     protected abstract int deductionAwardNumber(Long awardId, Integer number);
 
@@ -55,5 +69,10 @@ public abstract class BaseDrawExe {
 
     protected abstract void checkActivityRule(ActivityConfigVO activityConfigVO);
 
+    /**
+     * 校验活动
+     *
+     * @param activityVO
+     */
     protected abstract void checkActivityTime(ActivityVO activityVO);
 }

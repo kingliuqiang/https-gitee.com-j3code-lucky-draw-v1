@@ -13,6 +13,7 @@ import cn.j3code.luckyapp.assembler.AwardAssembler;
 import cn.j3code.luckyapp.award.command.AwardAddCmdExe;
 import cn.j3code.luckyapp.award.command.AwardUpdateCmdExe;
 import cn.j3code.luckyapp.award.query.AwardListByParamQueryExe;
+import cn.j3code.luckyapp.listener.event.ActivityCreateEvent;
 import cn.j3code.luckyapp.rule.query.RuleListByParamQueryExe;
 import cn.j3code.luckyclient.api.IActivityConfigService;
 import cn.j3code.luckyclient.dto.*;
@@ -24,6 +25,7 @@ import cn.j3code.luckyclient.dto.query.RuleListByParamQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,6 +58,9 @@ public class ActivityConfigServiceImpl implements IActivityConfigService {
     private final AwardListByParamQueryExe awardListByParamQueryExe;
 
 
+    private final ApplicationEventMulticaster applicationEventMulticaster;
+
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ActivityConfigVO add(ActivityConfigAddCmd cmd) {
@@ -70,6 +75,11 @@ public class ActivityConfigServiceImpl implements IActivityConfigService {
         activityConfigVO.setActivityVO(activityVO);
         activityConfigVO.setRuleVOList(ruleVOList);
         activityConfigVO.setAwardVOList(awardVOList);
+
+        // 发送活动创建事件
+        applicationEventMulticaster.multicastEvent(new ActivityCreateEvent("", activityConfigVO));
+        // 发布一个 MQ 信息
+
         return activityConfigVO;
     }
 
