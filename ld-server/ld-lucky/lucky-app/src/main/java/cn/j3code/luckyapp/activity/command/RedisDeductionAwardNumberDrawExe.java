@@ -7,6 +7,7 @@ import cn.j3code.luckydomain.gateway.PrizeGateway;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,6 +24,15 @@ public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
+    private static String stockDeductionLua;
+    private static String stockRollbackLua;
+
+    static {
+        RedisDeductionAwardNumberDrawExe.stockDeductionLua = FileLoad.read("lua/stock_deduction.lua");
+        RedisDeductionAwardNumberDrawExe.stockRollbackLua = FileLoad.read("lua/lua_rollback.lua");
+    }
+
+
 
     public RedisDeductionAwardNumberDrawExe(AwardGateway awardGateway,
                                             PrizeGateway prizeGateway,
@@ -35,18 +45,17 @@ public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
 
     @Override
     public Integer defaultDeductionAwardNumber(Long activityId, Long awardId ) {
-        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
-        // lua 脚本
-        redisScript.setScriptText(FileLoad.read("lua/stock_deduction.lua"));
-        // 返回执行后的库存
-        redisScript.setResultType(Long.class);
+        /**
+         * stockDeductionLua: lua 脚本
+         * Long.class: 返回执行后的库存值类型
+         */
+        RedisScript<Long> redisScript = new DefaultRedisScript<>(stockDeductionLua, Long.class);
 
         Long execute = redisTemplate.opsForValue().getOperations().execute(
                 redisScript,
                 List.of(AwardInventoryToRedisApplicationListener.getKey(activityId, awardId))
         );
 
-        //
         // execute = -1 表明 库存扣减失败
         if (execute == -1) {
             // 失败
