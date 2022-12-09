@@ -32,4 +32,9 @@ public class ActivityDrawContext {
      */
     private Boolean isWinTheLottery;
 
+    /**
+     * 是否可见，用户中奖日志是否可见
+     */
+    private Boolean isShow;
+
 }

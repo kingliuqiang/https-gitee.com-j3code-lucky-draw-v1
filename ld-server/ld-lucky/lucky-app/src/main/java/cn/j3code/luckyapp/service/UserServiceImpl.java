@@ -48,7 +48,13 @@ public class UserServiceImpl implements IUserService {
     @Override
     public String login(UserLoginQuery query) {
         UserVO userVO = userLoginQueryExe.execute(query);
-        return JwtUtil.createToken(Map.of("username", userVO.getUsername(), "name", userVO.getName(), "phone", userVO.getPhone()));
+        return JwtUtil.createToken(Map.of(
+                "username", userVO.getUsername(),
+                "name", userVO.getName(),
+                "phone", userVO.getPhone(),
+                "userId", userVO.getId()
+                )
+        );
     }
 
     @Override

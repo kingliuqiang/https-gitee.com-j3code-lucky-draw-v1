@@ -2,9 +2,13 @@ package cn.j3code.luckyapp.activity.command;
 
 import cn.hutool.core.lang.WeightRandom;
 import cn.hutool.core.util.RandomUtil;
+import cn.j3code.config.enums.RecordStatusEnum;
 import cn.j3code.config.exception.LdException;
 import cn.j3code.config.util.AssertUtil;
+import cn.j3code.config.util.SecurityUtil;
+import cn.j3code.luckyapp.assembler.RecordAssembler;
 import cn.j3code.luckyapp.context.ActivityDrawContext;
+import cn.j3code.luckyclient.dto.RecordAddCmd;
 import cn.j3code.luckyclient.dto.data.*;
 import cn.j3code.luckydomain.activity.ActivityEntity;
 import cn.j3code.luckydomain.activity.ActivityStatusEnum;
@@ -12,6 +16,7 @@ import cn.j3code.luckydomain.activity.ActivityTime;
 import cn.j3code.luckydomain.award.AwardEntity;
 import cn.j3code.luckydomain.gateway.AwardGateway;
 import cn.j3code.luckydomain.gateway.PrizeGateway;
+import cn.j3code.luckydomain.gateway.RecordGateway;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +38,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DefaultDrawExe extends BaseDrawExe {
 
+    private final RecordGateway recordGateway;
     private final AwardGateway awardGateway;
     private final PrizeGateway prizeGateway;
     private final TransactionTemplate transactionTemplate;
@@ -40,7 +46,15 @@ public class DefaultDrawExe extends BaseDrawExe {
 
     @Override
     protected void addRecord(ActivityDrawContext context) {
+        RecordAddCmd recordAddCmd = new RecordAddCmd();
+        recordAddCmd.setUserId(SecurityUtil.getUserId());
+        recordAddCmd.setActivityId(context.getActivityConfigVO().getActivityVO().getId());
+        recordAddCmd.setActivityName(context.getActivityConfigVO().getActivityVO().getActivityName());
+        recordAddCmd.setAwardId(context.getAwardVO().getId());
+        recordAddCmd.setIsWinning(Boolean.TRUE.equals(context.getAwardEntity().isPrize()) ? 1 : 0);
+        recordAddCmd.setState(context.getIsShow() ? RecordStatusEnum.STATUE_1.getValue() : RecordStatusEnum.STATUE_0.getValue());
 
+        recordGateway.save(RecordAssembler.toAddEntity(recordAddCmd));
     }
 
     @Override
@@ -53,7 +67,8 @@ public class DefaultDrawExe extends BaseDrawExe {
                 // 扣减库存
                 int update = awardGateway.deductionAwardNumber(context.getAwardVO().getId(), 1);
                 AssertUtil.isTrue(update != 1, "扣减库存失败！");
-                // 插入记录
+                // 插入记录，可见记录
+                context.setIsShow(Boolean.TRUE);
                 addRecord(context);
             } catch (Exception e) {
                 //错误处理
