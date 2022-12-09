@@ -1,4 +1,4 @@
-package cn.j3code.luckyapp.mq.product;
+package cn.j3code.luckyapp.mq.producer;
 
 import cn.hutool.core.util.IdUtil;
 import cn.j3code.config.dto.ActivityDrawMessage;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class ActivityDrawMessageProduct {
+public class ActivityDrawMessageProducer {
 
     private final RocketMQTemplate rocketMQTemplate;
 

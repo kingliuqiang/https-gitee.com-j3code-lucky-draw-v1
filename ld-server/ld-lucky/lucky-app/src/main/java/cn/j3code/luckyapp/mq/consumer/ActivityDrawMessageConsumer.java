@@ -1,4 +1,4 @@
-package cn.j3code.luckyapp.mq.consume;
+package cn.j3code.luckyapp.mq.consumer;
 
 import cn.j3code.config.dto.ActivityDrawMessage;
 import com.alibaba.fastjson.JSON;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RocketMQMessageListener(topic = "activity-draw-topic", consumerGroup = "lucky_draw")
-public class ActivityDrawMessageConsume implements RocketMQListener<ActivityDrawMessage> {
+public class ActivityDrawMessageConsumer implements RocketMQListener<ActivityDrawMessage> {
 
     @Override
     public void onMessage(ActivityDrawMessage activityDrawMessage) {

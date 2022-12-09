@@ -4,7 +4,7 @@ import cn.j3code.config.exception.LdException;
 import cn.j3code.config.util.FileLoad;
 import cn.j3code.luckyapp.context.ActivityDrawContext;
 import cn.j3code.luckyapp.listener.AwardInventoryToRedisApplicationListener;
-import cn.j3code.luckyapp.mq.product.ActivityDrawMessageProduct;
+import cn.j3code.luckyapp.mq.producer.ActivityDrawMessageProducer;
 import cn.j3code.luckydomain.gateway.AwardGateway;
 import cn.j3code.luckydomain.gateway.PrizeGateway;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.Objects;
 public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ActivityDrawMessageProduct activityDrawMessageProduct;
+    private final ActivityDrawMessageProducer activityDrawMessageProducer;
 
     private static String stockDeductionLua;
     private static String stockRollbackLua;
@@ -42,11 +42,11 @@ public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
     public RedisDeductionAwardNumberDrawExe(AwardGateway awardGateway,
                                             PrizeGateway prizeGateway,
                                             TransactionTemplate transactionTemplate,
-                                            ActivityDrawMessageProduct activityDrawMessageProduct,
+                                            ActivityDrawMessageProducer activityDrawMessageProducer,
                                             RedisTemplate<String, Object> redisTemplate) {
         super(awardGateway, prizeGateway, transactionTemplate);
         this.redisTemplate = redisTemplate;
-        this.activityDrawMessageProduct = activityDrawMessageProduct;
+        this.activityDrawMessageProducer = activityDrawMessageProducer;
     }
 
 
@@ -66,7 +66,7 @@ public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
                 // 插入不可见抽奖记录
                 super.addRecord(context);
                 // 发送 MQ 消息
-                if (Boolean.FALSE.equals(activityDrawMessageProduct.send(context))) {
+                if (Boolean.FALSE.equals(activityDrawMessageProducer.send(context))) {
                     throw new LdException("MQ发送消息失败！");
                 }
             } catch (Exception e) {
