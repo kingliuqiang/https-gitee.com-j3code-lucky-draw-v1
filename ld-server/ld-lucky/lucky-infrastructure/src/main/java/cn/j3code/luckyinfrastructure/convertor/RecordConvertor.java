@@ -29,17 +29,17 @@ public class RecordConvertor {
 
     public static RecordEntity toEntity(RecordDB recordDB) {
         RecordEntity recordEntity = new RecordEntity();
-        recordEntity.setId(recordEntity.getId());
-        recordEntity.setUserId(recordEntity.getUserId());
-        recordEntity.setActivityId(recordEntity.getActivityId());
-        recordEntity.setActivityName(recordEntity.getActivityName());
-        recordEntity.setAwardId(recordEntity.getAwardId());
-        recordEntity.setIsWinning(recordEntity.getIsWinning());
-        recordEntity.setState(new RecordStatus(recordEntity.getState().getState()));
-        recordEntity.setCreateTime(recordEntity.getCreateTime());
-        recordEntity.setCreator(recordEntity.getCreator());
-        recordEntity.setUpdateTime(recordEntity.getUpdateTime());
-        recordEntity.setUpdater(recordEntity.getUpdater());
+        recordEntity.setId(recordDB.getId());
+        recordEntity.setUserId(recordDB.getUserId());
+        recordEntity.setActivityId(recordDB.getActivityId());
+        recordEntity.setActivityName(recordDB.getActivityName());
+        recordEntity.setAwardId(recordDB.getAwardId());
+        recordEntity.setIsWinning(recordDB.getIsWinning());
+        recordEntity.setState(new RecordStatus(recordDB.getState()));
+        recordEntity.setCreateTime(recordDB.getCreateTime());
+        recordEntity.setCreator(recordDB.getCreator());
+        recordEntity.setUpdateTime(recordDB.getUpdateTime());
+        recordEntity.setUpdater(recordDB.getUpdater());
 
         return recordEntity;
     }

@@ -1,5 +1,6 @@
 package cn.j3code.luckyapp.activity.command;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.WeightRandom;
 import cn.hutool.core.util.RandomUtil;
 import cn.j3code.config.enums.RecordStatusEnum;
@@ -10,6 +11,7 @@ import cn.j3code.luckyapp.assembler.RecordAssembler;
 import cn.j3code.luckyapp.context.ActivityDrawContext;
 import cn.j3code.luckyclient.dto.RecordAddCmd;
 import cn.j3code.luckyclient.dto.data.*;
+import cn.j3code.luckyclient.dto.query.RecordListByParamQuery;
 import cn.j3code.luckydomain.activity.ActivityEntity;
 import cn.j3code.luckydomain.activity.ActivityStatusEnum;
 import cn.j3code.luckydomain.activity.ActivityTime;
@@ -17,6 +19,8 @@ import cn.j3code.luckydomain.award.AwardEntity;
 import cn.j3code.luckydomain.gateway.AwardGateway;
 import cn.j3code.luckydomain.gateway.PrizeGateway;
 import cn.j3code.luckydomain.gateway.RecordGateway;
+import cn.j3code.luckydomain.record.RecordEntity;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +29,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author J3（about：https://j3code.cn）
@@ -46,6 +52,10 @@ public class DefaultDrawExe extends BaseDrawExe {
 
     @Override
     protected void addRecord(ActivityDrawContext context) {
+        // 插入记录，默认记录可见
+        if (Objects.isNull(context.getIsShow())) {
+            context.setIsShow(Boolean.TRUE);
+        }
         RecordAddCmd recordAddCmd = new RecordAddCmd();
         recordAddCmd.setUserId(SecurityUtil.getUserId());
         recordAddCmd.setActivityId(context.getActivityConfigVO().getActivityVO().getId());
@@ -54,7 +64,29 @@ public class DefaultDrawExe extends BaseDrawExe {
         recordAddCmd.setIsWinning(Boolean.TRUE.equals(context.getAwardEntity().isPrize()) ? 1 : 0);
         recordAddCmd.setState(context.getIsShow() ? RecordStatusEnum.STATUE_1.getValue() : RecordStatusEnum.STATUE_0.getValue());
 
-        recordGateway.save(RecordAssembler.toAddEntity(recordAddCmd));
+        context.setRecordId(recordGateway.save(RecordAssembler.toAddEntity(recordAddCmd)).getId());
+    }
+
+    @Override
+    protected DrawResultVO addRecordAndGetDrawResultVO(ActivityDrawContext context) {
+
+        DrawResultVO resultVO = transactionTemplate.execute(status -> {
+
+            DrawResultVO drawResultVO = null;
+            try {
+                addRecord(context);
+                drawResultVO = getDrawResultVO(context.getAwardEntity());
+            } catch (Exception e) {
+                //错误处理
+                status.setRollbackOnly();
+                log.error("插入抽奖记录或封装抽奖结果失败！", e);
+            }
+            return drawResultVO;
+        });
+
+        AssertUtil.isTrue(Objects.isNull(resultVO), "抱歉访问人数过多稍后再来！");
+
+        return resultVO;
     }
 
     @Override
@@ -67,8 +99,6 @@ public class DefaultDrawExe extends BaseDrawExe {
                 // 扣减库存
                 int update = awardGateway.deductionAwardNumber(context.getAwardVO().getId(), 1);
                 AssertUtil.isTrue(update != 1, "扣减库存失败！");
-                // 插入记录，可见记录
-                context.setIsShow(Boolean.TRUE);
                 addRecord(context);
             } catch (Exception e) {
                 //错误处理
@@ -86,7 +116,9 @@ public class DefaultDrawExe extends BaseDrawExe {
     protected DrawResultVO getDrawResultVO(AwardEntity awardEntity) {
         DrawResultVO drawResultVO = new DrawResultVO();
         drawResultVO.setAwardName(awardEntity.getAwardName());
-        drawResultVO.setPrizeName(prizeGateway.one(awardEntity.getId()).getPrizeName());
+        if (Objects.nonNull(awardEntity.getPrizeId()) && !awardEntity.getPrizeId().toString().equals("0")) {
+            drawResultVO.setPrizeName(prizeGateway.one(awardEntity.getPrizeId()).getPrizeName());
+        }
         drawResultVO.setIsDraw(awardEntity.isPrize());
         return drawResultVO;
     }
@@ -107,8 +139,27 @@ public class DefaultDrawExe extends BaseDrawExe {
     @Override
     protected void checkActivityRule(ActivityConfigVO activityConfigVO) {
         List<RuleVO> ruleVOList = activityConfigVO.getRuleVOList();
+        if (CollUtil.isEmpty(ruleVOList)) {
+            return;
+        }
+        // 获取活动第一个规则
+        RuleVO ruleVO = ruleVOList.get(0);
 
+        final var query = new RecordListByParamQuery();
+        query.setUserId(SecurityUtil.getUserId());
+        query.setActivityId(activityConfigVO.getActivityVO().getId());
+        query.setPageSize(1000);
+        IPage<RecordEntity> page = recordGateway.page(query);
 
+        // 校验最大参与次数
+        AssertUtil.isTrue(page.getRecords().size() >= ruleVO.getMaxJoinNumber(), "你已达到活动最大参与次数，不可参与！");
+
+        List<RecordEntity> winningRecordList = page.getRecords()
+                .stream().filter(item -> item.getIsWinning() == 1)
+                .collect(Collectors.toList());
+
+        // 校验最大中奖次数
+        AssertUtil.isTrue(winningRecordList.size() >= ruleVO.getMaxWinningNumber(), "你已达到最大中奖次数，不可参与！");
     }
 
     @Override
@@ -117,7 +168,7 @@ public class DefaultDrawExe extends BaseDrawExe {
         activityEntity.setActivityTime(new ActivityTime(activityVO.getStartTime(), activityVO.getEndTime()));
         ActivityStatusEnum activityStatus = activityEntity.getActivityTime().getStatus();
         if (!ActivityStatusEnum.START.equals(activityStatus)) {
-            throw new LdException(String.format("活动s%", activityStatus.getDescription()));
+            throw new LdException(String.format("活动%s", activityStatus.getDescription()));
         }
     }
 }

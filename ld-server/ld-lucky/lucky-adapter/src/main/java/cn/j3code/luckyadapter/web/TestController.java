@@ -94,6 +94,6 @@ public class TestController {
 
     @GetMapping("/activityDrawMessageProducerTest")
     public Boolean activityDrawMessageProducerTest() {
-        return activityDrawMessageProducer.send(new ActivityDrawContext());
+        return activityDrawMessageProducer.sendTest(new ActivityDrawContext());
     }
 }

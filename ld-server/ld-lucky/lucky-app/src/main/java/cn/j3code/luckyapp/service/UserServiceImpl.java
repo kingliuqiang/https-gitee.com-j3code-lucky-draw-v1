@@ -52,7 +52,7 @@ public class UserServiceImpl implements IUserService {
                 "username", userVO.getUsername(),
                 "name", userVO.getName(),
                 "phone", userVO.getPhone(),
-                "userId", userVO.getId()
+                "id", userVO.getId()
                 )
         );
     }

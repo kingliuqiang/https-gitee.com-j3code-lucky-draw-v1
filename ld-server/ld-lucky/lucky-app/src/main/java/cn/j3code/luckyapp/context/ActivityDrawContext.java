@@ -37,4 +37,9 @@ public class ActivityDrawContext {
      */
     private Boolean isShow;
 
+    /**
+     * 中奖记录id
+     */
+    private Long recordId;
+
 }

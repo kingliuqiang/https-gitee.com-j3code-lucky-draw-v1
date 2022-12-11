@@ -73,6 +73,7 @@ public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
             try {
                 // 插入不可见抽奖记录
                 context.setIsShow(Boolean.FALSE);
+
                 super.addRecord(context);
                 // 发送 MQ 消息
                 if (Boolean.FALSE.equals(activityDrawMessageProducer.send(context))) {
@@ -135,7 +136,7 @@ public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
      * @return
      */
     public Boolean mqDeductionOfInventoryAndUpdateRecordStatus(ActivityDrawContext context) {
-        return deductionOfInventoryAndUpdateRecordStatus(context.getAwardVO().getId());
+        return deductionOfInventoryAndUpdateRecordStatus(context.getAwardVO().getId(), context.getRecordId());
     }
 
 
@@ -156,7 +157,7 @@ public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
                 continue;
             }
 
-            deductionOfInventoryAndUpdateRecordStatus(record.getAwardId());
+            deductionOfInventoryAndUpdateRecordStatus(record.getAwardId(), record.getId());
         }
     }
 
@@ -166,7 +167,7 @@ public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
      * @param awardId
      * @return
      */
-    public Boolean deductionOfInventoryAndUpdateRecordStatus(Long awardId) {
+    public Boolean deductionOfInventoryAndUpdateRecordStatus(Long awardId ,Long recordId) {
         return super.getTransactionTemplate().execute(status -> {
             Boolean success = Boolean.TRUE;
 
@@ -177,7 +178,7 @@ public class RedisDeductionAwardNumberDrawExe extends DefaultDrawExe {
                 AssertUtil.isTrue(update != 1, "扣减库存失败！");
 
                 // 修改不可见中奖记录状态
-                Boolean updateStatus = super.getRecordGateway().updateStatus(awardId, RecordStatusEnum.STATUE_1.getValue());
+                Boolean updateStatus = super.getRecordGateway().updateStatus(recordId, RecordStatusEnum.STATUE_1.getValue());
 
                 AssertUtil.isFalse(updateStatus, "修改记录状态失败！");
             } catch (Exception e) {
