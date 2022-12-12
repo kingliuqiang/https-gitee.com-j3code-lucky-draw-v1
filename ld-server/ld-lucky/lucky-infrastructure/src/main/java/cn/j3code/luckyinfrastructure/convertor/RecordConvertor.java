@@ -29,6 +29,8 @@ public class RecordConvertor {
 
     public static RecordEntity toEntity(RecordDB recordDB) {
         RecordEntity recordEntity = new RecordEntity();
+        recordEntity.setAwardName(recordDB.getAwardName());
+        recordEntity.setPrizeName(recordDB.getPrizeName());
         recordEntity.setId(recordDB.getId());
         recordEntity.setUserId(recordDB.getUserId());
         recordEntity.setActivityId(recordDB.getActivityId());

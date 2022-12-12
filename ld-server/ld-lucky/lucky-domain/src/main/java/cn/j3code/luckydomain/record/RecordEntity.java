@@ -1,6 +1,7 @@
 package cn.j3code.luckydomain.record;
 
 import com.alibaba.cola.domain.Entity;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,11 @@ public class RecordEntity {
      * 奖项id
      */
     private Long awardId;
+
+    private String awardName;
+
+    private String prizeName;
+
 
     /**
      * 是否中奖：0未中奖，1中奖

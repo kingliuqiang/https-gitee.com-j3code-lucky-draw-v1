@@ -33,6 +33,8 @@ public class RecordAssembler {
 
     public static RecordVO toRecordVO(RecordEntity entity) {
         RecordVO recordVO = new RecordVO();
+        recordVO.setAwardName(entity.getAwardName());
+        recordVO.setPrizeName(entity.getPrizeName());
         recordVO.setId(entity.getId());
         recordVO.setUserId(entity.getUserId());
         recordVO.setActivityId(entity.getActivityId());

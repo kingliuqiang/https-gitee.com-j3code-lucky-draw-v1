@@ -30,7 +30,13 @@
     </update>
     <select id="page" resultType="cn.j3code.luckyinfrastructure.gateway.impl.dataobject.RecordDB">
 
-        select * from bld_record a
+        select
+        a.*,
+        b.award_name,
+        c.prize_name
+        from bld_record a
+        left join bld_award b on a.award_id = b.id
+        left join bld_prize c on b.prize_id = c.id
         <where>
             <if test="query.userId != null">
                 and a.user_id = #{query.userId}
