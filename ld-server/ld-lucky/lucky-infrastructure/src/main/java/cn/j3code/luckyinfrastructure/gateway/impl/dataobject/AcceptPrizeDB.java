@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 /**
  * 
- * @TableName bld_record
+ * @TableName bld_accept_prize
  */
-@TableName(value ="bld_record")
+@TableName(value ="bld_accept_prize")
 @Data
-public class RecordDB implements Serializable {
+public class AcceptPrizeDB implements Serializable {
     /**
      * 
      */
@@ -20,60 +20,39 @@ public class RecordDB implements Serializable {
     private Long id;
 
     /**
-     * 用户id
+     * 抽奖记录id
      */
-    private Long userId;
+    private Long recordId;
 
     /**
-     * 活动id
+     * 电话
      */
-    private Long activityId;
-
-    private String activityName;
+    private String phone;
 
     /**
-     * 奖项id
+     * 地址
      */
-    private Long awardId;
-
-    @TableField(exist = false)
-    private String awardName;
-
-    @TableField(exist = false)
-    private String prizeName;
-
-    @TableField(exist = false)
-    private Integer prizeType;
+    private String address;
 
     /**
-     * 是否中奖：0未中奖，1中奖
-     */
-    private Integer isWinning;
-
-    /**
-     * 状态（0，1，2，3）
-     */
-    private Integer state;
-
-    /**
-     *
+     * 
      */
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
-     *
+     * 
      */
     private String creator;
 
     /**
-     *
+     * 
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     /**
-     *
+     * 
      */
     private String updater;
 

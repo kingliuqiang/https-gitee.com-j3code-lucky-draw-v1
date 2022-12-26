@@ -12,6 +12,8 @@ import lombok.Data;
 @Data
 public class RecordListByParamQuery extends PageQuery {
 
+    private Long recordId;
+
     private Long userId;
 
     private Long activityId;

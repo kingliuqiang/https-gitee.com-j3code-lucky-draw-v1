@@ -39,6 +39,8 @@ public class RecordVO {
 
     private String prizeName;
 
+    private Integer prizeType;
+
 
     /**
      * 是否中奖：0未中奖，1中奖

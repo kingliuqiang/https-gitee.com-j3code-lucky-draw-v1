@@ -1,5 +1,7 @@
 package cn.j3code.luckyapp.service;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.j3code.config.util.AssertUtil;
 import cn.j3code.luckyapp.record.command.RecordAddCmdExe;
 import cn.j3code.luckyapp.record.command.RecordUpdateStatusCmdExe;
 import cn.j3code.luckyapp.record.query.RecordListByParamQueryExe;
@@ -12,6 +14,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author J3（about：https://j3code.cn）
@@ -42,5 +47,16 @@ public class RecordServerImpl implements IRecordServer {
     @Override
     public Boolean update(RecordUpdateStatusCmd cmd) {
         return recordUpdateStatusCmdExe.execute(cmd);
+    }
+
+    @Override
+    public Integer prizeType(Long recordId) {
+        final var recordQuery = new RecordListByParamQuery();
+        recordQuery.setRecordId(recordId);
+
+        List<RecordVO> recordVOList = recordListByParamQueryExe.execute(recordQuery).getRecords();
+        AssertUtil.isTrue(CollUtil.isEmpty(recordVOList) || Objects.isNull(recordVOList.get(0)), "数据不存在！");
+
+        return recordVOList.get(0).getPrizeType();
     }
 }

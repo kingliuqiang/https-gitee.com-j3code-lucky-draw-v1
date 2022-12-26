@@ -33,11 +33,15 @@
         select
         a.*,
         b.award_name,
-        c.prize_name
+        c.prize_name,
+        c.type as prizeType
         from bld_record a
         left join bld_award b on a.award_id = b.id
         left join bld_prize c on b.prize_id = c.id
         <where>
+            <if test="query.recordId != null">
+                and a.id = #{query.recordId}
+            </if>
             <if test="query.userId != null">
                 and a.user_id = #{query.userId}
             </if>

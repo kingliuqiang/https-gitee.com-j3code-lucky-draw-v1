@@ -19,4 +19,11 @@ public interface IRecordServer {
     RecordVO add(RecordAddCmd cmd);
 
     Boolean update(RecordUpdateStatusCmd cmd);
+
+    /**
+     *
+     * @param recordId
+     * @return 1：商品，2：金额
+     */
+    Integer prizeType(Long recordId);
 }

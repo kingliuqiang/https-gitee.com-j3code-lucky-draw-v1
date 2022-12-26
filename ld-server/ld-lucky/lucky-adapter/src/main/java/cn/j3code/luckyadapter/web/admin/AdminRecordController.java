@@ -1,4 +1,4 @@
-package cn.j3code.luckyadapter.web;
+package cn.j3code.luckyadapter.web.admin;
 
 import cn.j3code.common.annotation.ResponseResult;
 import cn.j3code.config.util.SecurityUtil;
@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @AllArgsConstructor
 @ResponseResult
-@RequestMapping("/v1/record")
-public class RecordController {
+@RequestMapping("/admin/v1/record")
+public class AdminRecordController {
 
     private final IRecordServer recordServer;
 
@@ -31,14 +31,9 @@ public class RecordController {
         return recordServer.page(query);
     }
 
-    @GetMapping("/prizeType")
-    public Integer prizeType(@RequestParam("recordId") Long recordId) {
-        return recordServer.prizeType(recordId);
-    }
-
-    @GetMapping("/updateStatusTo4")
-    public Boolean updateStatusTo4(RecordUpdateStatusCmd cmd) {
-        cmd.setState(4);
+    @GetMapping("/updateStatusTo3")
+    public Boolean updateStatusTo3(RecordUpdateStatusCmd cmd) {
+        cmd.setState(3);
         return recordServer.update(cmd);
     }
 
