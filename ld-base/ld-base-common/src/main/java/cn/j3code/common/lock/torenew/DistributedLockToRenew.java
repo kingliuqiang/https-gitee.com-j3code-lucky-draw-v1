@@ -74,7 +74,6 @@ public class DistributedLockToRenew {
 
                 // 是否到达续约时间
                 if (Boolean.FALSE.equals(task.isToRenewTime(null))) {
-                    iterator.remove();
                     continue;
                 }
 

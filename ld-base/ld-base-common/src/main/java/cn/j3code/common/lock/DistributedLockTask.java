@@ -50,7 +50,7 @@ public class DistributedLockTask {
      * 是否达到续约时间
      *
      * @param time
-     * @return
+     * @return true：达到最大续约时间，可以续约
      */
     public Boolean isToRenewTime(LocalDateTime time) {
         if (Objects.isNull(time)) {
@@ -59,21 +59,24 @@ public class DistributedLockTask {
         LocalDateTime now = LocalDateTime.now();
         Duration duration = Duration.between(time, now);
 
+        //return duration.toSeconds() >=
+        //        (double) ((this.expiredTime / 3) * 2) ?
+        //        Boolean.TRUE : Boolean.FALSE;
         return duration.toSeconds() >=
-                (double) ((this.expiredTime / 3) * 2) ?
-                Boolean.TRUE : Boolean.FALSE;
+                (double) ((this.expiredTime / 3) * 2);
     }
 
     /**
      * 是否达到最大续约次数
      *
      * @param num
-     * @return
+     * @return true，表示达到最大续约次数，不可续约
      */
     public Boolean isMaxToRenewNum(Integer num) {
         if (Objects.isNull(num)) {
             num = this.newToRenewNum;
         }
-        return num >= this.maxToRenewNum ? Boolean.TRUE : Boolean.FALSE;
+        //return num >= this.maxToRenewNum ? Boolean.TRUE : Boolean.FALSE;
+        return num >= this.maxToRenewNum;
     }
 }

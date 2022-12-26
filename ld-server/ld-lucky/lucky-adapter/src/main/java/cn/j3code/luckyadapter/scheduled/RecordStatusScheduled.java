@@ -1,4 +1,4 @@
-package cn.j3code.luckyapp.scheduled;
+package cn.j3code.luckyadapter.scheduled;
 
 import cn.j3code.common.annotation.DistributedLock;
 import cn.j3code.luckyapp.activity.command.RedisDeductionAwardNumberDrawExe;
