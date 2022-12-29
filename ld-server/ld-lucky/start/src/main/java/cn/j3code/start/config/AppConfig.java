@@ -1,6 +1,7 @@
 package cn.j3code.start.config;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @createTime 2022/12/9 - 22:43
  * @description
  */
+@EnableFeignClients
 @Configuration
 @EnableScheduling
 @EnableTransactionManagement

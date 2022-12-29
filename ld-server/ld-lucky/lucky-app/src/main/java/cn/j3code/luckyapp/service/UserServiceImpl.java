@@ -9,10 +9,11 @@ import cn.j3code.luckyapp.user.query.UserListByParamQueryExe;
 import cn.j3code.luckyapp.user.query.UserLoginQueryExe;
 import cn.j3code.luckyclient.api.IUserService;
 import cn.j3code.luckyclient.dto.UserRegisterCmd;
+import cn.j3code.luckyclient.dto.UserUpdateCmd;
 import cn.j3code.luckyclient.dto.data.UserVO;
 import cn.j3code.luckyclient.dto.query.UserListByParamQuery;
 import cn.j3code.luckyclient.dto.query.UserLoginQuery;
-import cn.j3code.luckyclient.dto.UserUpdateCmd;
+import cn.j3code.luckyclient.feign.WalletFeignApi;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,19 +41,30 @@ public class UserServiceImpl implements IUserService {
     private final UserListByParamQueryExe userListByParamQueryExe;
     private final UserUpdateCmdExe userUpdateCmdExe;
 
+    private final WalletFeignApi walletFeignApi;
+
     @Override
     public UserVO register(UserRegisterCmd cmd) {
-        return userRegisterCmdExe.execute(cmd);
+        UserVO execute = userRegisterCmdExe.execute(cmd);
+
+        try {
+            walletFeignApi.initUserWallet(execute.getId());
+        } catch (Exception e) {
+            //错误处理
+            log.error("用户注册成功，但初始化用户钱包失败：", e);
+        }
+
+        return execute;
     }
 
     @Override
     public String login(UserLoginQuery query) {
         UserVO userVO = userLoginQueryExe.execute(query);
         return JwtUtil.createToken(Map.of(
-                "username", userVO.getUsername(),
-                "name", userVO.getName(),
-                "phone", userVO.getPhone(),
-                "id", userVO.getId()
+                        "username", userVO.getUsername(),
+                        "name", userVO.getName(),
+                        "phone", userVO.getPhone(),
+                        "id", userVO.getId()
                 )
         );
     }

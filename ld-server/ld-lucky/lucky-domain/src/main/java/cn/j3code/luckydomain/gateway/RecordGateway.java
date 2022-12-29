@@ -4,6 +4,8 @@ import cn.j3code.luckyclient.dto.query.RecordListByParamQuery;
 import cn.j3code.luckydomain.record.RecordEntity;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.math.BigDecimal;
+
 /**
  * @author J3（about：https://j3code.cn）
  * @package cn.j3code.luckydomain.gateway
@@ -18,4 +20,5 @@ public interface RecordGateway {
 
     Boolean updateStatus(Long id, Integer status);
 
+    BigDecimal getPrizeMoneyByRecordId(Long recordId);
 }

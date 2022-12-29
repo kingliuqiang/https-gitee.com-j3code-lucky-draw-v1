@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
+
 /**
 * @author Administrator
 * @description 针对表【bld_record】的数据库操作Mapper
@@ -19,6 +21,7 @@ public interface RecordMapper extends BaseMapper<RecordDB> {
 
     Integer updateStatus(@Param("id") Long id, @Param("status") Integer status);
 
+    BigDecimal getPrizeMoneyByRecordId(@Param("recordId") Long recordId);
 }
 
 

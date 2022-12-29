@@ -57,4 +57,11 @@
         </where>
 
     </select>
+    <select id="getPrizeMoneyByRecordId" resultType="java.math.BigDecimal">
+        SELECT c.money FROM bld_record a
+        LEFT JOIN bld_award b ON a.award_id = b.id
+        LEFT JOIN bld_prize c ON b.prize_id = c.id
+        WHERE c.type = 2
+          AND a.id = #{recordId}
+    </select>
 </mapper>

@@ -26,4 +26,6 @@ public interface IRecordServer {
      * @return 1：商品，2：金额
      */
     Integer prizeType(Long recordId);
+
+    Boolean exchangeMoney(Long recordId);
 }

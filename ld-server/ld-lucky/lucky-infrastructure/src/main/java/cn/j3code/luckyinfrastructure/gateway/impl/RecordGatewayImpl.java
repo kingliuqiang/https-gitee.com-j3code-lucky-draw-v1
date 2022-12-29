@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 /**
  * @author J3（about：https://j3code.cn）
  * @package cn.j3code.luckyinfrastructure.gateway.impl
@@ -46,5 +48,10 @@ public class RecordGatewayImpl implements RecordGateway {
     public Boolean updateStatus(Long id, Integer status) {
 
         return recordMapper.updateStatus(id, status) == 1;
+    }
+
+    @Override
+    public BigDecimal getPrizeMoneyByRecordId(Long recordId) {
+        return recordMapper.getPrizeMoneyByRecordId(recordId);
     }
 }
