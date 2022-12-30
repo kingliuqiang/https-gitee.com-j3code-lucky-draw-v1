@@ -76,7 +76,12 @@ public class RecordServerImpl implements IRecordServer {
 
     @Override
     public Boolean exchangeMoney(Long recordId) {
-        AssertUtil.isTrue(prizeType(recordId) != 2, "奖品类型兑换出错！");
+
+        RecordVO recordVO = getPrizeByRecordId(recordId);
+        AssertUtil.isTrue(recordVO.getPrizeType() != 2, "奖品类型兑换出错！");
+
+        AssertUtil.isTrue(recordVO.getState() != 1, "记录状态非法！");
+
         // 获取奖品金额
         BigDecimal money = recordMoneyParamQueryExe.execute(recordId);
 
@@ -89,7 +94,7 @@ public class RecordServerImpl implements IRecordServer {
         try {
             // TODO: 调用给用户钱包价钱逻辑
             final var walletForm = new UpdateWalletForm();
-            walletForm.setUpdateMoney(money.multiply(new BigDecimal("-1")));
+            walletForm.setUpdateMoney(money);
             walletForm.setUserId(SecurityUtil.getUserId());
             WalletUpdateResultVO walletUpdateResultVO = walletFeignApi.updateBalance(walletForm);
 

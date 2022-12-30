@@ -9,6 +9,7 @@ import cn.j3code.luckyapp.context.ActivityDrawContext;
 import cn.j3code.luckyapp.listener.AwardInventoryToRedisApplicationListener;
 import cn.j3code.luckyapp.listener.event.ActivityCreateEvent;
 import cn.j3code.luckyapp.mq.producer.ActivityDrawMessageProducer;
+import cn.j3code.luckyclient.api.IRecordServer;
 import cn.j3code.luckyclient.dto.data.ActivityConfigVO;
 import cn.j3code.luckyclient.dto.data.ActivityVO;
 import cn.j3code.luckyclient.dto.data.AwardVO;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ public class TestController {
     private final RedisDeductionAwardNumberDrawExe drawExe;
 
     private final ActivityDrawMessageProducer activityDrawMessageProducer;
+
+    private final IRecordServer recordServer;
 
     @GetMapping("/errorTest01")
     public void errorTest01() {
@@ -95,5 +99,10 @@ public class TestController {
     @GetMapping("/activityDrawMessageProducerTest")
     public Boolean activityDrawMessageProducerTest() {
         return activityDrawMessageProducer.sendTest(new ActivityDrawContext());
+    }
+
+    @GetMapping("/exchangeMoneyTest")
+    public Boolean exchangeMoneyTest(@RequestParam("recordId") Long recordId) {
+        return recordServer.exchangeMoney(recordId);
     }
 }

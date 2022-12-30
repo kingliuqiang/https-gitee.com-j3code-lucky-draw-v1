@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @createTime 2022/12/9 - 22:43
  * @description
  */
-@EnableFeignClients
+@EnableFeignClients(basePackages = "cn.j3code.luckyclient.feign")
 @Configuration
 @EnableScheduling
 @EnableTransactionManagement
