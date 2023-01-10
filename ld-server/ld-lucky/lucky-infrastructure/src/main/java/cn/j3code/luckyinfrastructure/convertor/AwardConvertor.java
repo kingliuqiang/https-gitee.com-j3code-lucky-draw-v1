@@ -38,6 +38,7 @@ public class AwardConvertor {
         awardEntity.setCreator(awardDB.getCreator());
         awardEntity.setUpdateTime(awardDB.getUpdateTime());
         awardEntity.setUpdater(awardDB.getUpdater());
+        awardEntity.setPrizeName(awardDB.getPrizeName());
 
         return awardEntity;
     }

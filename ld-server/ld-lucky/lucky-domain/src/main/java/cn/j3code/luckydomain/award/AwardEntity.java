@@ -24,7 +24,7 @@ public class AwardEntity {
      * 奖品名称
      */
     private Long prizeId;
-
+    private String prizeName;
     private Long activityId;
 
     /**

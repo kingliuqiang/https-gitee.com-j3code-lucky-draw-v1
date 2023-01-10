@@ -24,7 +24,7 @@ public class WalletFeign {
         return walletService.updateBalance(form);
     }
 
-    @PostMapping("/initUserWallet")
+    @GetMapping("/initUserWallet")
     public void initUserWallet(@RequestParam("userId") Long userId) {
         walletService.initUserWallet(userId);
     }

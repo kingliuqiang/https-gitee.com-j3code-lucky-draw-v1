@@ -34,9 +34,12 @@
     </update>
 
     <select id="page" resultMap="BaseResultMap">
-        select a.*
+        select
+            a.*,
+            c.prize_name
         from bld_award a
-                     left join bld_activity b on a.activity_id = b.id
+        left join bld_activity b on a.activity_id = b.id
+        left join bld_prize c on c.id = a.prize_id
         <where>
             <if test="query.id != null">
                 and a.id = #{query.id}

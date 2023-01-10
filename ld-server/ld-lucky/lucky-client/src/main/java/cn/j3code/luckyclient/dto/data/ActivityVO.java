@@ -38,6 +38,12 @@ public class ActivityVO {
     private String describe;
 
     /**
+     * 0,未开始，1，进行中，2已结束
+     */
+    private Integer status;
+
+
+    /**
      *
      */
     private LocalDateTime createTime;

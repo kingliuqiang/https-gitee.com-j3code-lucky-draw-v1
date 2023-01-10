@@ -1,6 +1,7 @@
 package cn.j3code.luckyadapter.web;
 
 import cn.j3code.common.annotation.ResponseResult;
+import cn.j3code.config.util.SecurityUtil;
 import cn.j3code.luckyclient.api.IUserService;
 import cn.j3code.luckyclient.dto.UserRegisterCmd;
 import cn.j3code.luckyclient.dto.data.UserVO;
@@ -39,6 +40,11 @@ public class UserController {
     @GetMapping("/one")
     public UserVO one(@RequestParam(value = "id") Long id) {
         return userService.one(id);
+    }
+
+    @GetMapping("/me")
+    public UserVO me() {
+        return userService.one(SecurityUtil.getUserId());
     }
 
     @PostMapping("/update")

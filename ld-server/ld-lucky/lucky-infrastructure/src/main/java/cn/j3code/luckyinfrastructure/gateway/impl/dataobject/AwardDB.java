@@ -23,6 +23,8 @@ public class AwardDB implements Serializable {
      * 奖品名称
      */
     private Long prizeId;
+    @TableField(exist = false)
+    private String prizeName;
 
     private Long activityId;
 

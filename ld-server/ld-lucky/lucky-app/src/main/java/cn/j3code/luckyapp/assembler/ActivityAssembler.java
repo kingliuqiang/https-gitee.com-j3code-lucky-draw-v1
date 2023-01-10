@@ -39,7 +39,7 @@ public class ActivityAssembler {
         activityVO.setCreator(entity.getCreator());
         activityVO.setUpdateTime(entity.getUpdateTime());
         activityVO.setUpdater(entity.getUpdater());
-
+        activityVO.setStatus(entity.getActivityTime().getStatus().getValue());
 
         return activityVO;
     }
