@@ -94,17 +94,20 @@ public class DefaultDrawExe extends BaseDrawExe {
 
         return transactionTemplate.execute(status -> {
             Boolean seccess = Boolean.TRUE;
+            int update = 0;
             try {
                 // 这里需要优化
                 // 扣减库存
-                int update = awardGateway.deductionAwardNumber(context.getAwardVO().getId(), 1);
+                update = awardGateway.deductionAwardNumber(context.getAwardVO().getId(), 1);
                 AssertUtil.isTrue(update != 1, "扣减库存失败！");
                 addRecord(context);
             } catch (Exception e) {
                 //错误处理
                 status.setRollbackOnly();
-                // 回退库存
-                awardGateway.deductionAwardNumber(context.getAwardVO().getId(), -1);
+                if (update > 0){
+                    // 回退库存
+                    awardGateway.deductionAwardNumber(context.getAwardVO().getId(), -1);
+                }
                 log.error("扣减库存和插入记录出错", e);
                 seccess = Boolean.FALSE;
             }
