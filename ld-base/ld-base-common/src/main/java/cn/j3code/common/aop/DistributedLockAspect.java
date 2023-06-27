@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class DistributedLockAspect {
 
     private final RedisTemplate<String, Object> redisTemplate;
+    private final DistributedLockToRenew distributedLockToRenew;
 
     private static final String defaultKey = "distributed:lock:aspect:";
 
@@ -48,7 +49,12 @@ public class DistributedLockAspect {
                 .setIfAbsent(key, Thread.currentThread().getId() + "", 5, TimeUnit.MINUTES);
 
         if (Boolean.FALSE.equals(absent)) {
-            return;
+            // 判断是否需要抛错
+            DistributedLock distributedLock = getDistributedLockAnnotation(getMethod(joinPoint));
+            if (Boolean.FALSE.equals(distributedLock.lockFail())) {
+                return;
+            }
+            throw new RuntimeException(distributedLock.failMessage());
         }
 
         try {
@@ -79,7 +85,7 @@ public class DistributedLockAspect {
         task.setNewToRenewNum(0);
         task.setNewUpdatedTime(LocalDateTime.now());
         task.setThread(Thread.currentThread());
-        DistributedLockToRenew.taskList.add(task);
+        distributedLockToRenew.addTask(task);
         log.info("task集合添加任务成功：task：{}", JSON.toJSONString(task));
     }
 
@@ -96,8 +102,23 @@ public class DistributedLockAspect {
         }
 
         String key = annotation.key();
+        String keyPrefix = defaultKey + method.getClass().getName() + ":" + method.getName();
+
         if (Objects.isNull(key)) {
-            key = defaultKey + method.getClass().getName() + ":" + method.getName();
+            return keyPrefix;
+        }
+
+        // 填充 key 存在占位符的情况，并返回
+        return keyPrefix + ":" + replenishKey(key, joinPoint.getArgs());
+    }
+
+    private String replenishKey(String key, Object[] args) {
+        if (Objects.isNull(args) || args.length == 0) {
+            return key;
+        }
+
+        for (int i = 0; i < args.length; i++) {
+            key = key.replace(String.format("{%s}", i + 1), args[i].toString());
         }
         return key;
     }
