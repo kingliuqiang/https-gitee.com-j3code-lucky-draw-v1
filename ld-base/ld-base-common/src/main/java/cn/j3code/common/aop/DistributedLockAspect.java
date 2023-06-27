@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class DistributedLockAspect {
 
     private final RedisTemplate<String, Object> redisTemplate;
+    private final DistributedLockToRenew distributedLockToRenew;
 
     private static final String defaultKey = "distributed:lock:aspect:";
 
@@ -79,7 +80,7 @@ public class DistributedLockAspect {
         task.setNewToRenewNum(0);
         task.setNewUpdatedTime(LocalDateTime.now());
         task.setThread(Thread.currentThread());
-        DistributedLockToRenew.taskList.add(task);
+        distributedLockToRenew.addTask(task);
         log.info("task集合添加任务成功：task：{}", JSON.toJSONString(task));
     }
 
